@@ -1,0 +1,1135 @@
+#VRML V2.0 utf8
+
+
+EXTERNPROTO Eisläufer[ field SFColor color field SFString kamera] "Eisläufer.wrl"
+
+
+#Roter Eisläufer mit Taschenlampe mit Animation
+DEF Eisläufer Transform {
+	translation 85 17.1 3
+	scale 1.7 1.7 1.7
+		children [
+			DEF Rot Transform{
+								children	[
+					Eisläufer	{
+						color 1 0 0
+						kamera "Rot"
+					}
+							DEF Schalter2 TouchSensor {}
+
+							DEF Taschenlampe Transform {
+								translation	-1.4 -4.2 1.5
+								rotation 1 0 0 -1.57
+								children [
+									Shape {
+										geometry Cone {
+										bottomRadius 0.5
+										height 2
+										}
+									 appearance Appearance {
+									 material Material {
+									 diffuseColor 1 0 0
+									 specularColor 0.2 0.5 0.5
+									 ambientIntensity .5
+									 shininess .7
+									}
+								}
+							}
+							DEF TSLicht SpotLight {
+								location 1 1 1
+						  	direction 0 -1 0
+								intensity 10
+								color 0.9 0.9 1
+								ambientIntensity 1
+								radius 60
+								attenuation 1 0 0
+								beamWidth 1.570796
+								cutOffAngle 0.785398
+								on FALSE
+							}
+					DEF TSLicht1 PointLight {
+								ambientIntensity 1
+								attenuation 1 0 0
+								color 0.8 0.8 0.8
+						   	intensity 0.7
+								location 1 0 0
+								on FALSE
+								radius 20
+						 }
+					 ]
+				 }
+				]
+			}
+		]
+}
+DEF	Animation Script {
+	eventIn SFTime toggleAnimation
+	eventOut SFTime	startzeit1
+	eventOut SFTime	startzeit2
+	url	"javascript:
+	function initialize(){
+	}
+	function toggleAnimation(value, time){
+		startzeit1 = value;
+		startzeit2 = value+3;
+	}
+	"
+}
+DEF laufe PositionInterpolator {
+	key [ 0 0.05 0.07 0.10 0.14 0.20 0.28 0.30 0.35 0.4 0.45 0.48 0.52 0.55 0.59 0.62
+													0.65 0.69 0.72 0.76 0.79 0.83 0.86 0.9 0.93 0.97 1.0]
+	keyValue [
+						0 0 0 #1
+						0 0 95 #2
+						0 0 95 #3
+						0 0 95 #4
+						0 0 95 #5
+						0 0 95
+
+					  0 13 95
+					  0.5 0 95
+
+					 -45 0 95
+					 -45 0 95
+	 				 -45 0 95
+					 -45 0 10
+					 -45 0 10
+					 -45 0 10
+
+					 	0 0 10
+						0 0 10
+						1 0 30
+						1 0 30
+						1 0 25
+						1 0 25
+
+						0 0 10
+
+						0 0 0
+ ]
+}
+DEF	Drehungen OrientationInterpolator {
+	key [0 0.1 0.11 0.12 0.13 0.14 0.17 0.21 0.22 0.23 0.24 0.28 0.31 0.34 0.38 0.4 0.45
+	 					0.48 0.52 0.55 0.59 0.62 0.65 0.69 0.72 0.76 0.79 0.83 0.86 0.9 0.93 0.97 1.0]
+	keyValue [
+							0 0 0 0
+
+    					0 1 0 0 #1
+							0 1 0 0 #2
+							0 1 0 0 #3
+						#	0 1 0 0 #4
+					#		0 1 0 0
+
+    					0 1 0 1.60
+    					0 1 0 1.60
+    					0 1 0 1.60
+					    0 1 0 1.60
+    					0 1 0 1.60
+
+    					0 1 0 3.14
+    					0 1 0 3.14
+    				  0 1 0 -1.60
+	  					0 1 0 -1.60
+							0 1 0 -1.60
+
+					   	0 1 0 3.14
+						  0 1 0 3.14
+					   	0 1 0 3.14
+						  0 1 0 3.14
+							0 1 0 3.14
+							0 1 0 3.14
+
+							0 1 0 6.30
+
+    					0 1 0 -1.60
+    					0 1 0 -1.60
+    					0 1 0 3.14
+    					0 1 0 3.14
+							0 1 0 3.14
+
+							0 1 0 3.14
+    			    0 1 0 -6.28
+    ]
+}
+DEF Uhr1 TimeSensor {
+	cycleInterval 40
+}
+ROUTE Schalter2.touchTime TO Animation.toggleAnimation
+ROUTE Animation.startzeit1 TO Uhr1.set_startTime
+ROUTE Uhr1.fraction_changed	TO laufe.set_fraction
+ROUTE laufe.value_changed TO Rot.set_translation
+ROUTE Uhr1.fraction_changed	TO Drehungen.set_fraction
+ROUTE Drehungen.value_changed TO	Rot.set_rotation
+ROUTE Schalter2.touchTime TO Uhr1.startTime
+
+
+# Gelber Eisläufer1 der hinterher läuft mit Animation
+DEF Eisläufer1 Transform {
+	translation 85 17.1 -8
+	scale 1.7 1.7 1.7
+		children [
+			DEF Gelb Transform{
+								children	[
+								USE Taschenlampe
+					Eisläufer	{
+						color 0.9 0.9 0
+					kamera "Gelb"
+				}
+				]
+			}
+
+		]
+}
+DEF	Animation2 Script {
+	eventIn SFTime toggleAnimation
+	eventOut SFTime	startzeit1
+	eventOut SFTime	startzeit2
+	url	"javascript:
+	function initialize(){
+	}
+	function toggleAnimation(value, time){
+		startzeit1 = value;
+		startzeit2 = value+3;
+	}
+	"
+}
+DEF laufe2 PositionInterpolator{
+	key [ 0.04 0.10 0.25 0.31 0.37 0.4 0.45 0.48 0.50 0.52 0.55 0.59 0.62 0.65 0.69 0.72 0.76 0.79 0.83 0.86 0.9 0.93 0.97 1.0]
+
+	keyValue [
+							0 0 0 #1
+							0 0 110 #2
+							0 0 110 #3
+							0 0 110 #4
+							0 0 110 #5
+							0 0 110
+
+							0 13 110
+							0.5 0 110
+
+						-45 0 110
+ 						-45 0 110
+ 						-45 0 110
+ 						-45 0 10
+ 						-45 0 10
+ 						-45 0 10
+
+							0 0 10
+							0 0 10
+							1 0 30
+							1 0 30
+							1 0 25
+							1 0 25
+
+							1 0 0
+							1 0 0
+
+							0 0 0
+
+	]
+}
+DEF	Drehungen1 OrientationInterpolator {
+	key [0 0.1 0.11 0.12 0.13 0.14 0.17 0.21 0.22 0.23 0.24 0.28 0.31 0.34
+										0.38 0.4 0.45 0.48 0.52 0.55 0.59 0.62 0.65 0.69 0.72 0.76 0.79 0.83 0.86 0.9 0.93 0.97 1.0]
+	keyValue
+    [
+		0 0 0 0
+
+		0 1 0 0 #1
+		0 1 0 0 #2
+		0 1 0 0 #3
+		0 1 0 0 #4
+
+		0 1 0 1.60
+		0 1 0 1.60
+		0 1 0 1.60
+		0 1 0 1.60
+		0 1 0 1.60
+
+		0 1 0 3.14
+		0 1 0 3.14
+		0 1 0 -1.60
+		0 1 0 -1.60
+		0 1 0 -1.60
+
+		0 1 0 3.14
+		0 1 0 3.14
+		0 1 0 3.14
+		0 1 0 3.14
+
+		0 1 0 6.30
+		0 1 0 6.30
+		0 1 0 6.30
+		0 1 0 6.30
+		0 1 0 6.30
+
+		0 1 0 -1.60
+		0 1 0 -1.60
+		0 1 0 3.14
+		0 1 0 3.14
+		0 1 0 3.14
+
+		0 1 0 3.14
+		0 1 0 -6.28
+    ]
+}
+DEF Uhr2 TimeSensor {
+	cycleInterval 40
+}
+ROUTE Schalter2.touchTime TO Animation2.toggleAnimation
+ROUTE Animation2.startzeit1 TO Uhr2.set_startTime
+ROUTE Uhr2.fraction_changed	TO laufe2.set_fraction
+ROUTE laufe2.value_changed TO Gelb.set_translation
+ROUTE Uhr2.fraction_changed	TO Drehungen1.set_fraction
+ROUTE Drehungen1.value_changed TO	Gelb.set_rotation
+ROUTE Schalter2.touchTime TO Uhr2.startTime
+#Eisläufer
+DEF Eisläufer2 Transform {
+	translation 70 17.1 -5
+	rotation 0 0 0 0
+	scale 1.7 1.7 1.7
+		children [
+			DEF Blau Transform{
+								children	[
+								USE Taschenlampe
+					   Eisläufer {
+							 color 0.1 0.1 0.9
+						 kamera "Blau"
+					 }
+				]
+			}
+
+		]
+}
+DEF Eisläufer3 Transform {
+	translation 20 17.1 5
+	rotation 0 0 0 0
+	scale 1.7 1.7 1.7
+		children [
+			DEF Weis Transform{
+								children	[
+								USE Taschenlampe
+					Eisläufer {
+						color 1 1 1
+					kamera "Weis"
+				}
+				]
+			}
+		]
+}
+DEF Eisläufer4 Transform {
+	translation 275 17.1 185
+	rotation 0 0 0 0
+	scale 1.7 1.7 1.7
+		children [
+			DEF Grün Transform{
+								children	[
+								USE Taschenlampe
+					Eisläufer {
+						color 0 1 0
+					kamera "Grün"}
+				]
+			}
+		]
+}
+
+
+# Nachtszene
+DEF	NachtSchalter Script	{
+	eventIn	SFBool schalter
+	eventOut SFBool	status
+	eventOut SFBool	status2
+	field SFBool x FALSE
+	field SFBool x2 TRUE
+
+	url	 ["javascript:
+		function  schalter(bool){
+				if(bool) x=!x;
+				x2=!x;
+				status2 =x2;
+				status= x ;
+		}
+		" ]
+}
+DEF	Navi NavigationInfo {
+	avatarSize [0.5, 0.6, 1]
+	headlight TRUE
+	speed 1
+	type ["WALK", "ANY"]
+}
+DEF Nachtszenario Transform {
+	translation	180 80 0
+	children [
+		DEF	Nacht TouchSensor {
+			enabled	TRUE
+		}
+		DEF	NachtSchalterKnopf Shape {
+
+			geometry Box {
+				size 10 10 10
+			}
+			appearance Appearance {
+				material Material {
+					diffuseColor 1 1 1
+					specularColor .74 .76 .53
+					emissiveColor .18 .18 0
+					ambientIntensity .04
+				}
+			}
+		}
+	]
+}
+ROUTE Nacht.isActive TO NachtSchalter.schalter
+ROUTE NachtSchalter.status TO  Navi.set_headlight
+ROUTE NachtSchalter.status2 TO TSLicht.on
+
+ROUTE Nacht.isActive TO NachtSchalter.schalter
+ROUTE NachtSchalter.status TO  Navi.set_headlight
+ROUTE NachtSchalter.status2 TO TSLicht1.on
+
+# Grundfläche mit IndexedFaceSet gemacht
+Transform {
+ scale  30 20 25
+ children[
+Shape {
+  geometry IndexedFaceSet {
+    coord Coordinate {point	[
+        -1 0 -1
+        11 0 -1
+        11 0 10
+        -1 0 10
+      ]}
+    coordIndex [0 3 2 1 -1]
+    solid FALSE
+  }
+  appearance Appearance {
+    material Material {
+	#		diffuseColor 0.9 0.9 0.9
+		}
+		texture ImageTexture {
+			url ["SB.jpg"]
+			repeatS TRUE
+			repeatT TRUE
+		}
+  }
+}
+]
+}
+
+
+# Tische für Marktplatz
+Transform {
+	translation	265 0 230
+	children [
+		DEF	Tisch Transform {
+			translation	0 7 0
+			children[
+				Shape {
+					geometry Cylinder{
+						radius 2
+            height 12
+					}
+					appearance Appearance {
+						material Material {
+							diffuseColor 0.3 0.2 0
+						}
+           #texture ImageTexture {url "Tannenbaum.jpg"}
+					}
+				}
+				Transform {
+					translation	0 6 0
+					children [
+						Shape {
+							geometry Cylinder {
+								radius 6
+								height 0.75
+							}
+							appearance Appearance {
+								material Material {}
+
+                  texture ImageTexture {
+                    url ["holz.jpg"]
+                    repeatS TRUE
+                    repeatT TRUE
+                  }
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+} #weitere Tische mit DEF USE HINZUGEFÜGT
+Transform {
+	translation	215 0 220
+	children [
+		USE Tisch
+	]
+}
+Transform {
+	translation	240 0 230
+	children [
+		USE	Tisch
+	]
+}
+Transform {
+	translation	230 0 185
+	children [
+		USE	Tisch
+	]
+}
+Transform {
+	translation	275 0 195
+	children [
+		USE	Tisch
+	]
+}
+
+# größer Tannenbaum im Marktplatz
+Transform {
+	translation	245 3 205
+	children [
+				Shape {
+					geometry Cylinder{
+            radius 2.5
+            height 6
+					}
+					appearance Appearance {
+						material Material {}
+							texture ImageTexture {
+								url ["TBS.jpg"]
+								repeatS TRUE
+								repeatT TRUE
+							}
+					}
+				}
+				Transform {
+					translation	0 27 0
+					children [
+						Shape {
+
+							geometry Cone {
+								bottomRadius 17
+								height 57
+							}
+							appearance Appearance {
+								material Material {}
+                texture ImageTexture {
+                  url ["Tannenbaum.png"]
+                  repeatS TRUE
+                  repeatT TRUE
+                }
+							}
+						}
+					]
+				}
+			]
+		}
+
+# Häuser mit DEF USE vermehrt
+Transform {
+	translation	250 0 50
+	children [
+		DEF	Häuser Transform {
+			translation	0 23 0
+			children[
+				Shape {
+					geometry Box{
+						size 35 45 40
+					}
+					appearance Appearance {
+						material Material {}
+							texture ImageTexture {
+								url ["haus.jpg"]
+								repeatS TRUE
+								repeatT TRUE
+							}
+
+					}
+				}
+				Transform {
+					translation	0 23 0
+					children [
+						Shape {
+							geometry Box {
+								size 35 1 40
+							}
+							appearance Appearance {
+								material Material {
+							#		diffuseColor 1 1 1
+								}
+								texture ImageTexture {
+									url ["dach.jpg"]
+									repeatS TRUE
+									repeatT TRUE
+								}
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+}
+Transform {
+	translation	200 0 10
+	children [
+		USE	Häuser
+	]
+}
+Transform {
+	translation	200 0 80
+	children [
+		USE	Häuser
+	]
+}
+Transform {
+	translation	300 0 80
+	children [
+		USE	Häuser
+	]
+}
+Transform {
+	translation	300 0 20
+	children [
+		USE	Häuser
+	]
+}
+
+#Lichtkegel
+Transform{
+  translation 220 0.2 120
+  scale       1 1 1
+  	children[
+         Transform{
+            translation 0 0 0
+              children[
+                DEF Lichtkegel Shape{
+                          appearance Appearance{
+                              material Material{
+                                	diffuseColor 0.9 0.9 0
+                              }
+                          }
+
+                    geometry Cylinder{
+                        height 0.001
+                        radius 18
+                    }
+                }
+								DEF Lichtkegel1 SpotLight {
+                    location 50 80 3
+                    intensity 5
+                    direction 0 -1 0
+                    ambientIntensity 5
+                    color 0.9 0.9 0
+                    radius 100
+                    attenuation 1 0 0
+                    on TRUE
+                }
+              ]
+            }
+      ]
+}
+
+Transform {
+      translation 220 0.3 80
+      children[
+          USE Lichtkegel
+      ]
+}
+Transform {
+      translation 280 0.2 80
+      children[
+          USE Lichtkegel
+      ]
+}
+Transform {
+      translation 280 0.2 120
+      children[
+          USE Lichtkegel
+      ]
+}
+
+
+# Lichtplatten
+DEF	script Script	{
+	eventIn	SFBool schalter
+	eventOut SFBool	status
+	field SFBool x TRUE
+	url	 ["javascript:
+		function  schalter(bool){
+			if(bool) x=!x  ;
+				status=x ;
+		}
+		" ]
+}
+Transform {
+  translation -13 42 -10
+  rotation  0 0 0 0
+  children [
+  DEF Lichtplatten Transform{
+    translation 0 4 0
+  children[
+	DEF PointLight PointLight {
+				 intensity 1
+				 ambientIntensity 1
+				 color 1 0.98 0.40
+				 location 50 0 30
+				 radius 100
+				 attenuation 1 0 0
+				 on FALSE
+			 }
+  Shape {
+    geometry Box {
+      size 7 10 7
+    }
+    appearance Appearance {
+      material Material{
+        diffuseColor 0.8 0.8 0
+			     }
+				 }
+  }
+	]
+}
+]
+}
+Transform{
+	translation 105 42 170
+	children[
+	 	USE Lichtplatten
+	]
+}
+Transform{
+	translation 170 42 -10
+	children[
+	 USE Lichtplatten
+	]
+}
+Transform{
+	translation 280 42 -10
+	children[
+	 USE Lichtplatten
+	 ]
+}
+Transform{
+	translation 200 42 185
+	children[
+	 USE Lichtplatten
+	 ]
+}
+Transform{
+	translation 300 42 185
+	children[
+	 USE Lichtplatten
+	 ]
+}
+Transform{
+	translation 300 42 240
+	children[
+	 USE Lichtplatten
+	 ]
+}
+Transform{
+	translation 200 42 240
+	children[
+	USE Lichtplatten
+  ]
+}
+Transform{
+	translation -13 42 240
+	children[
+	 USE Lichtplatten
+	]
+}
+
+
+Transform{
+			translation 150 80 0
+	children [
+		DEF	sensor TouchSensor {
+			enabled TRUE
+		}
+		DEF	schalter Shape {
+			appearance Appearance {
+				material Material {
+				diffuseColor 1 1 1
+				}
+			}
+			geometry Sphere{
+				radius 6
+			}
+		}
+	]
+			ROUTE sensor.isActive TO script.schalter
+			ROUTE script.status TO PointLight.set_on
+	  	ROUTE sensor.isActive TO PointLight.set_on
+}
+
+
+#LichtStangen
+Transform {
+  translation 105 0 170
+  children[
+DEF Säule Transform{
+	translation	0 25 0
+	children [
+		Shape {
+			geometry Cylinder {
+				radius 1
+				height 50
+			}
+      appearance Appearance{
+        material Material{}
+      }
+		}
+	]
+}
+]
+}
+Transform {
+	translation	-13 0 -10
+		children [
+	  USE	Säule
+	]
+}
+Transform {
+	translation	-13 0 240
+		children [
+	  USE	Säule
+	]
+}
+Transform {
+	translation	200 0 240
+		children [
+	USE	Säule
+  ]
+}
+Transform {
+	translation	300 0 240
+		children [
+	USE	Säule
+	]
+}
+Transform {
+	translation	300 0 185
+		children [
+	USE	Säule
+	]
+}
+Transform {
+	translation	200 0 185
+		children [
+	USE	Säule
+	]
+}
+Transform {
+	translation	280 0 -10
+		children [
+	USE	Säule
+	]
+}
+Transform {
+	translation	170 0 -10
+		children [
+	USE	Säule
+	]
+}
+
+
+#Schlittschuhbahn
+Transform {
+	translation	45 0 90
+	children [
+		Shape {
+      geometry IndexedFaceSet {
+        coord Coordinate {point	[
+            -1 0 -1
+            11 0 -1
+            11 0 10
+            -1 0 10
+          ]}
+
+        coordIndex [0 3 2 1 -1]
+        solid FALSE
+      }
+			appearance Appearance{
+				material Material{}
+        texture ImageTexture {
+          url ["ESB.jpg"]
+          repeatS TRUE
+          repeatT TRUE
+        }
+			}
+			geometry Box{
+				size 	110 0.2 203
+			}
+		}
+	]
+}
+
+#Trennbrett
+Transform{
+   translation -10 6 90
+  children [
+      Shape {
+        appearance Appearance {
+          material Material {  }
+          texture ImageTexture {
+            url ["holz.jpg"]
+            repeatS TRUE
+            repeatT TRUE
+          }
+        }
+        geometry Box {
+          size 2 15 200
+  }
+}
+  ]
+}
+Transform{
+   translation 100 6 80
+  children [
+      Shape {
+        appearance Appearance {
+          material Material {  }
+          texture ImageTexture {
+            url ["holz.jpg"]
+            repeatS TRUE
+            repeatT TRUE
+        }
+        }
+       geometry Box {
+          size 2 15 185
+  }
+}
+  ]
+}
+Transform{
+   translation 45 6 -12
+  children [
+      Shape {
+        appearance Appearance {
+          material Material {  }
+          texture ImageTexture {
+            url ["bunt.jpg"]
+            repeatS TRUE
+            repeatT TRUE
+          }
+        }
+        geometry Box {
+          size 110 15 2
+  }
+}
+  ]
+}
+Transform{
+   translation 45 6 190
+  children [
+      Shape {
+      appearance Appearance {
+          material Material {  }
+          texture ImageTexture {
+            url ["holz.jpg"]
+            repeatS TRUE
+           repeatT TRUE
+          }
+        }
+        geometry Box {
+          size 110 15 2
+  }
+}
+  ]
+}
+
+
+#SchlittschuheSchrank
+Transform{
+   translation 45 12 210
+  children [
+      Shape {
+      appearance Appearance {
+          material Material {}
+						texture ImageTexture {
+							url ["SSR.jpg"]
+							repeatS TRUE
+							repeatT TRUE
+						}
+        }
+        geometry Box {
+          size 35 25 35
+  }
+}
+			Transform {
+				translation	0 13 0
+				children [
+					Shape {
+						geometry Box {
+							size 35 1 35
+						}
+						appearance Appearance {
+							material Material {
+								diffuseColor 1 1 1
+							}
+					}
+		}
+	]
+}
+  ]
+}
+
+
+### MarktplatzBox
+Transform{
+   translation 310 17 215
+  children [
+      Shape {
+      appearance Appearance {
+          material Material {  }
+          texture ImageTexture {
+            url ["Haus2.jpg"]
+            repeatS TRUE
+           repeatT TRUE
+          }
+        }
+        geometry Box {
+          size 40 35 40
+  }
+}
+	Transform {
+	translation	0 17.5 0
+	children [
+		Shape {
+			geometry Box {
+				size 40 1 40
+			}
+			appearance Appearance {
+				material Material {
+					diffuseColor 1 1 1
+				}
+			}
+		}
+	]
+}
+  ]
+}
+
+
+#Verschiede Bäume
+Transform {
+	translation	100 0 230
+	children [
+		DEF	Bäume Transform {
+			translation	0 2 0
+			children[
+				Shape {
+					geometry Cylinder{
+						radius 2
+            height 4
+					}
+					appearance Appearance {
+						material Material {}
+           texture ImageTexture{
+						 url ["TBS.jpg"]
+						 repeatS TRUE
+						 repeatT TRUE
+
+						}
+					}
+				}
+				Transform {
+					translation	0 17 0
+					children [
+						Shape {
+							geometry Cone {
+								bottomRadius 8
+								height 30
+							}
+							appearance Appearance {
+								material Material {
+								}
+                 texture ImageTexture {
+                    url ["TBB.png"]
+                    repeatS TRUE
+                    repeatT TRUE
+               }
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+}
+Transform {
+	translation	125 0 210
+		children [
+	USE	Bäume
+	]
+}
+Transform {
+	translation	95 0 200
+		children [
+	USE	Bäume
+	]
+}
+Transform {
+	translation	145 0 110
+		children [
+	USE	Bäume
+	]
+}
+Transform {
+	translation	250 0 100
+		children [
+	USE	Bäume
+	]
+}
+
+
+#Hintergrund
+Background {
+  skyColor [                      # Farbverlauf für Himmel
+    0 0.1 0.5,                  # beginnt bei Hellblau
+    1 1 1]                  # endet bei Weiß
+  skyAngle [1.57]                # Ende des Himmels bei  90 Grad
+  groundColor   [                 # Farbverlauf für Boden
+    0 0 1,               # beginnt bei dunkelgrau
+    0.75 0.75 0.75]               # endet bei hellgrau
+  groundAngle [1.57]             # Ende des Bodens bei 90 Grad
+}
+#Komplette Sicht Miniprojekt
+Viewpoint {
+	description	"Vorne Sicht"
+	jump TRUE
+	orientation	1 0 0 -0.785398
+	position 150 395 450
+}
+# Oben Schlittschuhbahnsicht
+Viewpoint {
+	description	"Vogelperspektive"
+	jump FALSE
+	orientation	1 0 0 -1.5708
+	position 40 350 60
+}
+# schlittschuhbahn pers. sicht
+Viewpoint {
+	description "Frontansicht"
+	jump TRUE
+  orientation 1 0 0  -0.1745278		 # bzgl x-Achse um 10 Grad nach unten gekippt
+  position    50 25 100           # 30 Einheiten vor dem Ursprung, 8 hoch
+   # bzgl x-Achse um 10 Grad nach unten gekippt
+}
+# schlittschuhbahn sicht
+Viewpoint {
+	description	"Frontansicht"
+	jump TRUE
+	orientation	1 0 0 -0.785398
+	position 40 140 260
+}
+# Marktplatz
+Viewpoint {                       # ein weitere Betrachterstandpunkt
+	description "Marktplatzsicht" # genannt "Froschperspektive"
+	jump TRUE
+  orientation 1 0 0 -0.785398    # bzgl. y-Achse um 90 Grad nach links gedreht
+	position    250 140 300          # 20 Einheiten vom Ursprung nach rechts
+}
